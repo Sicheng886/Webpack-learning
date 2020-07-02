@@ -140,6 +140,9 @@ module: {
           // 优点：减少请求
           // 缺点：增大体积
           limit: 8 * 1024,
+          // 图片文件默认采用hash值作为文件名，下面选项对文件名重命名以缩短文件长度
+          // [hash:10] 代表取前10位， [ext]：取文件原拓展名extension filename
+          name: "[hash:10].[ext]",
         },
       },
     ],
@@ -156,6 +159,7 @@ module: {
         loader: "url-loader",
         options: {
           limit: 8 * 1024,
+          name: "[hash:10].[ext]",
           //关闭 es6的模块化语法，使用commonjs解析
           esModule:false,
         },

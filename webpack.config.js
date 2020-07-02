@@ -45,6 +45,9 @@ module.exports = {
           limit: 8 * 1024,
           //关闭 es6的模块化语法，使用commonjs解析
           esModule: false,
+          // 图片文件默认采用hash值作为文件名，下面选项对文件名重命名以缩短文件长度
+          // [hash:10] 代表取前10位， [ext]：取文件原拓展名extension filename
+          name: "[hash:10].[ext]",
         },
       },
       // 处理HTML中的图片资源, 负责引入img从而能被url-loader处理
