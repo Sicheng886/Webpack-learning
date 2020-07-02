@@ -24,7 +24,7 @@ Webpack 会通过一个入口文件，此处为 **index.js** 来开始，从中�
 
 ### 安装
 
-```cli
+```bash
 npm i webpack webpack-cli -g
 npm i webpack webpack-cli -D
 ```
@@ -35,13 +35,13 @@ npm i webpack webpack-cli -D
 
 1.开发环境指令：
 
-```cli
+```bash
 webpack ./src/index.js -o  ./build/built.js --mode=development
 ```
 
 2.生产环境指令:
 
-```cli
+```bash
 webpack ./src/index.js -o  ./build/built.js --mode=production
 ```
 
@@ -93,7 +93,7 @@ module: {
         // 匹配哪些文件 （正则）
         test: /\.css$/,
         // 使用哪些loader
-        use: [
+        use: [ //use接受数组使用多个模块
           // 执行顺序从数组右侧到左侧
           // 创建style标签，将js中的css资源插入，添加到页面中生效
           "style-loader",
@@ -122,4 +122,50 @@ plugins: [
       template: "./src/index.html",
     }),
   ],
+```
+
+### 打包图片资源
+
+图片资源同样使用 loader 处理，需要安装 **file-loader** 及 **url-loader** 两个模块。使用 **url-loader**，但 url-loader 依赖于 fileloader。对于样式中引入的图片，进行如下配置
+
+```js
+module: {
+    rules: [
+      //处理图片资源 （无法处理html中的资源）
+      {
+        test: /\.(jpg|png|gif|jpeg)$/,
+        loader: "url-loader", //loader接受字符串，配置单个模块
+        options: {
+          // 图片大小小于8kb会被转成base64处理
+          // 优点：减少请求
+          // 缺点：增大体积
+          limit: 8 * 1024,
+        },
+      },
+    ],
+  },
+```
+
+但该方法无法引入 html 中的图片资源，要引入 html 中的图片需要配合使用 **html-laoder**, 如下：
+
+```js
+module: {
+    rules: [
+      {
+        test: /\.(jpg|png|gif|jpeg)$/,
+        loader: "url-loader",
+        options: {
+          limit: 8 * 1024,
+          //关闭 es6的模块化语法，使用commonjs解析
+          esModule:false,
+        },
+      },
+       // 处理HTML中的图片资源, 负责引入img从而能被url-loader处理
+      {
+        test: /\.html$/,
+        // url-loader 默认使用es6模块化进行解析，但html-loader默认返回的是commonjs的结果，直接解析会报错
+        loader: "html-loader",
+      },
+    ],
+  },
 ```
