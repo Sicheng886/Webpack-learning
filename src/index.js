@@ -10,6 +10,7 @@
 import data from "./data.json";
 import "./styles/index.css";
 import "./styles/styles.scss";
+import "./styles/iconfont.css";
 
 function add(x, y) {
   return x + y;

@@ -36,7 +36,7 @@ module.exports = {
       },
       //处理图片资源 （无法处理html中的资源）
       {
-        test: /\.(jpg|png|gif|jpeg)$/,
+        test: /\.(jpg|png|gif)$/,
         loader: "url-loader", //loader接受字符串，配置单个模块
         options: {
           // 图片大小小于8kb会被转成base64处理
@@ -56,6 +56,14 @@ module.exports = {
         // url-loader 默认使用es6模块化进行解析，但html-loader默认返回的是commonjs的结果，直接解析会报错
         loader: "html-loader",
       },
+      // 打包其它资源
+      {
+        exclude: /\.(html|json|js|css|scss|jpg|png|gif)$/, // 用排除法
+        loader: "file-loader",
+        options: {
+          name: "[hash:10].[ext]",
+        },
+      },
     ],
   },
   //插件
@@ -67,4 +75,16 @@ module.exports = {
     }),
   ],
   mode: "development",
+
+  // 配置开发者服务器
+  devServer: {
+    // 项目构建后路径
+    contentBase: resolve(__dirname, "build"),
+    // 启用gzip压缩
+    compress: true,
+    // 端口号
+    port: 3000,
+    // 自动打开浏览器
+    open: true,
+  },
 };

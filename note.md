@@ -173,3 +173,64 @@ module: {
     ],
   },
 ```
+
+### 打包其他资源
+
+其他资源，包括字体图表等其它全部不需要修改直接打包的资源。使用先前下载过的 **file-loader** 即可完成操作。
+规则使用 exclude 进行排除法，需要完全排除其它被处理过的资源。
+
+```js
+module: {
+  rules: [
+    // 打包其它资源
+    {
+      exclude: /\.(html|json|js|css|scss|jpg|png|gif)$/, // 用排除法
+      loader: "file-loader",
+      options: {
+        //同样可以缩短命名
+        name: "[hash:10].[ext]",
+      },
+    },
+  ];
+}
+```
+
+## Dev Server
+
+Dev Server，开发者服务器，用于自动化实时编译并刷新浏览器以查看最新代码效果。
+
+只会在内存中进行打包而不会有任何输出。启用指令为 **npx webpack-dev-server**，需安装对应拓展包。
+
+```bash
+npm i webpack-dev-server -D
+
+npx webpack-dev-server
+```
+
+在 5 个核心配置项之下进行配置
+
+```js
+/*
+配置文件， 指示webpack 怎么干活
+*/
+//用来拼接绝对路径的模块
+const { resolve } = require("path");
+
+module.exports = {
+  //配置
+  entry: "./src/index.js",
+  ...
+  mode: "development",
+  // 配置开发者服务器
+  devServer: {
+    // 项目构建后路径
+    contentBase: resolve(__dirname, "build"),
+    // 启用gzip压缩
+    compress: true,
+    // 端口号
+    port: 3000,
+    // 自动打开浏览器
+    open:true
+  },
+};
+```
