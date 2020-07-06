@@ -7,7 +7,7 @@
   webpack .src/index.js -o  ./build/built.js --mode=development
 */
 
-import data from "./data.json";
+import data from "./utils/data.json";
 import "./styles/index.css";
 import "./styles/styles.scss";
 import "./styles/iconfont.css";

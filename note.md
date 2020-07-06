@@ -2,13 +2,13 @@
 
 这是 webpack 的学习笔记
 
-## Introduction
+## 简介
 
 Webpack 是一个构建工具和静态模块打包工具，用于解决高级语法如 import 和 less 等工具无法被浏览器识别的问题，也可以打包其他静态文件。
 
 Webpack 会通过一个入口文件，此处为 **index.js** 来开始，从中寻找依赖并进行进一步的编译。编译的过程叫做打包，打包后输出的文件叫做 boundle， 输入的模块叫做 chunk。
 
-## Core Concept
+## 核心概念
 
 1. Entry：为 webpack 指示入口文件开始打包，分析构建内部依赖
 
@@ -20,7 +20,7 @@ Webpack 会通过一个入口文件，此处为 **index.js** 来开始，从中�
 
 5. Mode：Develop Mode & Production Mode
 
-## 初步配置
+## 开发环境配置
 
 ### 安装
 
@@ -174,6 +174,8 @@ module: {
   },
 ```
 
+需要注意的是 html-loader 使用 commonjs 语法，因此需要在 url-loader 中关闭模块化语法
+
 ### 打包其他资源
 
 其他资源，包括字体图表等其它全部不需要修改直接打包的资源。使用先前下载过的 **file-loader** 即可完成操作。
@@ -195,7 +197,7 @@ module: {
 }
 ```
 
-## Dev Server
+### Dev Server
 
 Dev Server，开发者服务器，用于自动化实时编译并刷新浏览器以查看最新代码效果。
 
@@ -233,4 +235,38 @@ module.exports = {
     open:true
   },
 };
+```
+
+### 输出文件目录配置
+
+在输出时在 output 配置项下加入子文件夹路径即可将其放入对应文件夹中。对于 js 文件的输出进行如下配置。
+
+```js
+module.export = {
+  output: {
+    filename: "js/built.js", // 输出文件名
+    path: resolve(__dirname, "build"), // __dirname 是当前文件的绝对路径，是node的变量
+  },
+};
+```
+
+对于图片等其它资源的配置在对应 loader 的 options 中进行配置。
+
+```js
+module.export={
+   module: {
+    rules: [
+      {
+        exclude: /\.(html|json|js|css|scss|jpg|png|gif)$/,
+        loader: "file-loader",
+        options: {
+          name: "[hash:10].[ext]",
+          // 设置输出路径
+          outputPath: "media",
+        },
+      },
+    ],
+  },
+  },
+}
 ```
