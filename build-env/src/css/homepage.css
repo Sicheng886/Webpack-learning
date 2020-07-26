@@ -1,0 +1,8 @@
+.title {
+  font-size: 5rem;
+}
+
+#box {
+  border: 3px solid blue;
+  margin: auto;
+}
